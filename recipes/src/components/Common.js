@@ -41,6 +41,7 @@ export const MainSection = styledComponents.article`
 
   p, dt {
     margin-bottom: 20px;
+    white-space: pre-line;
   }
 
   form {

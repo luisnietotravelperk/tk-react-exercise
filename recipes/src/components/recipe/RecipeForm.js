@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, ButtonBox, MainSection } from "../Common";
 
@@ -16,6 +16,7 @@ const RecipeForm = () => {
 
   const recipeId = params.recipeId
   const baseUrl = `http://localhost:8000/api/recipe/recipe/`
+  const baseUrlUpdate = `${baseUrl}${recipeId}/`
 
   const title = recipeId
     ? 'Update a recipe'
@@ -24,6 +25,8 @@ const RecipeForm = () => {
   const [description, setDescription] = useState('')
   const [ingredients, setIngredients] = useState([])
   const [ingredientInput, setIngredientInput] = useState('')
+  const [isPending, setIsPending] = useState(false)
+  const [error, setError] = useState(null)
 
   const addIngredient = () => {
     if (ingredientInput === '') {
@@ -48,22 +51,66 @@ const RecipeForm = () => {
       description: description,
       ingredients: ingredients
     }
+    const url = recipeId ? baseUrlUpdate : baseUrl
+    const method = recipeId ? 'PUT' : 'POST'
+    const redirect  = recipeId ? `/recipes/${recipeId}` : '/recipes'
 
-    fetch('http://localhost:8000/api/recipe/recipe/', {
-      method: 'POST',
+    setError(null)
+
+    fetch(url, {
+      method: method,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(recipe)
     }).then((res) => {
       if (res.ok) {
-        navigate('/recipes')
+        navigate(redirect)
+      } else {
+        setError(res.statusText)
       }
     })
+  }
+
+  useEffect(() => {
+    getRecipe()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const getRecipe = () => {
+    if (!recipeId) {
+      return;
+    }
+
+    setIsPending(true)
+    setError(null)
+
+    fetch(baseUrlUpdate)
+      .then(res => {
+        if (!res.ok) {
+          throw Error('Could not fetch the data')
+        }
+
+        return res.json();
+      })
+      .then(data => {
+        setName(data.name)
+        setDescription(data.description)
+        setIngredients(data.ingredients)
+        setIsPending(false)
+      })
+      .catch(e => {
+        if (e.name !== 'AbortError') {
+          setError(e.message)
+          setIsPending(false)
+        }
+      })
   }
 
   return (
     <MainSection>
       <h1>{title}</h1>
-      <form onSubmit={(e) => handleSubmit(e)}>
+      {isPending && <div>Loading...</div>}
+      {error && <div>{error}</div>}
+      {!isPending && !error && <form onSubmit={(e) => handleSubmit(e)}>
         <label>Name:</label>
         <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
 
@@ -91,7 +138,7 @@ const RecipeForm = () => {
         <ButtonBox>
           <Button type="submit" style={{width: "100%"}}>Save</Button>
         </ButtonBox>
-      </form>
+      </form>}
     </MainSection>
   );
 }

@@ -1,14 +1,26 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
 import { Button, ButtonBox, MainSection } from "../Common";
 
 const RecipeDetail = () => {
   let params = useParams()
+  let navigate = useNavigate()
   const recipeId = params.recipeId
 
   // Get the information of the recipe
   const baseUrl = `http://localhost:8000/api/recipe/recipe/${recipeId}/`
   const { data: recipe, isPending, error } = useFetch(baseUrl)
+
+  const handleDelete =  () => {
+    fetch(baseUrl, {
+      method: 'DELETE',
+      headers: { "Content-Type": "application/json" }
+    }).then(res => {
+      if (res.ok) {
+        navigate('/recipes')
+      }
+    })
+  }
 
   return (
     <MainSection>
@@ -30,7 +42,7 @@ const RecipeDetail = () => {
             <li>Not ingredients were register</li>
           )}
           <ButtonBox>
-            <Button>Delete</Button>
+            <Button onClick={() => handleDelete()}>Delete</Button>
             <Link to="/recipes">
               <Button>Back</Button>
             </Link>
