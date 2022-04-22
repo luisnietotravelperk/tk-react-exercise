@@ -42,6 +42,51 @@ export const MainSection = styledComponents.article`
   p, dt {
     margin-bottom: 20px;
   }
+
+  form {
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+
+    label {
+      text-align: left;
+      display: block;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 6px 10px;
+      margin:  10px 0;
+      border: 1px solid ${SecondaryColor};
+      box-sizing: border-box;
+      display: block;
+    }
+
+    .span-content {
+      border: 3px dashed #333;
+      min-height: 20px;
+      padding: 7px;
+
+      span {
+        background-color: ${MainColor};
+        color: white;
+        padding: 5px 10px;
+        border-radius: 20px;
+        margin: 5px;
+        display: inline-block;
+      }
+
+      i {
+        color: white;
+        padding-left: 10px;
+
+        &:hover {
+          font-weight: bold;
+          cursor: pointer;
+        }
+      }
+    }
+  }
 `
 
 export const ListSection = styledComponents.section`

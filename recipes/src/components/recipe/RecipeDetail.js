@@ -4,9 +4,10 @@ import { Button, ButtonBox, MainSection } from "../Common";
 
 const RecipeDetail = () => {
   let params = useParams()
+  const recipeId = params.recipeId
 
   // Get the information of the recipe
-  const baseUrl = `http://localhost:8000/api/recipe/recipe/${params.recipeId}/`
+  const baseUrl = `http://localhost:8000/api/recipe/recipe/${recipeId}/`
   const { data: recipe, isPending, error } = useFetch(baseUrl)
 
   return (
@@ -16,7 +17,10 @@ const RecipeDetail = () => {
       { recipe && (
         <section>
           <h1>{recipe.name}</h1>
-          <h2>Description</h2>
+          <h2>
+            Description
+            [<Link to={`/recipes/update/${recipeId}`}>Edit</Link>]
+          </h2>
           <p>{recipe.description}</p>
           <h2>Ingredients</h2>
           { recipe.ingredients.length > 0 && recipe.ingredients.map(m => (
