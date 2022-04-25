@@ -16,11 +16,12 @@ const RecipeList = () => {
     setRecipes(null)
 
     getRecipes(name).then(data => {
-      setPending(false)
+      // console.log(data)
       setRecipes(data)
-    }).catch(e => {
       setPending(false)
+    }).catch(e => {
       setError(e.message)
+      setPending(false)
     })
   }
 
@@ -31,7 +32,7 @@ const RecipeList = () => {
   useEffect(() => {
     fetchRecipes()
   },[])
-
+  // console.log({isPending, recipes})
   return (
     <MainSection>
       <h1>Recipes</h1>
@@ -40,13 +41,13 @@ const RecipeList = () => {
         <h2>Search</h2>
         <div style={{display:"flex"}}>
           <span>Name:</span>
-          <input
+          <input aria-label="input-search"
             type="text" placeholder="Recipe name" value={search}
             onChange={(e) => setSearch(e.target.value)}
             style={{flexGrow: 1, marginLeft: "10px"}} />
         </div>
         <ButtonBox>
-          <Button onClick={() => handleSearch()}>Search</Button>
+          <Button aria-label="button-search" onClick={() => handleSearch()}>Search</Button>
         </ButtonBox>
       </section>
 

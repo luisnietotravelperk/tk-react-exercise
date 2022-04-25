@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { ListSection } from "../Common";
 
 const RecipeListElements = ({recipes}) => {
+  // console.log('Items:', {recipes})
   return (
     <ListSection>
       {recipes.map((recipe) => (
