@@ -1,26 +1,40 @@
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import useFetch from "../../hooks/useFetch";
+import { deleteRecipe, getRecipe } from "../../apis/RecipeAPI";
 import { Button, ButtonBox, MainSection } from "../Common";
 
 const RecipeDetail = () => {
   let params = useParams()
   let navigate = useNavigate()
-  const recipeId = params.recipeId
 
-  // Get the information of the recipe
-  const baseUrl = `http://localhost:8000/api/recipe/recipe/${recipeId}/`
-  const { data: recipe, isPending, error } = useFetch(baseUrl)
+  const recipeId = params.recipeId
+  const [recipe, setRecipe] = useState(null)
+  const [isPending, setPending] = useState(true)
+  const [error, setError] = useState(null)
 
   const handleDelete =  () => {
-    fetch(baseUrl, {
-      method: 'DELETE',
-      headers: { "Content-Type": "application/json" }
-    }).then(res => {
-      if (res.ok) {
-        navigate('/recipes')
-      }
-    })
+    deleteRecipe(recipeId)
+      .then(ok => {
+        if (ok) {
+          navigate('/recipes')
+        }
+      })
+      .catch(e => {
+        setError(e.message)
+      })
   }
+
+  useEffect(() => {
+    getRecipe(recipeId)
+      .then(data => {
+        setRecipe(data)
+        setPending(false)
+      })
+      .catch(e => {
+        setError(e.message)
+        setPending(false)
+      })
+  }, [recipeId])
 
   return (
     <MainSection>

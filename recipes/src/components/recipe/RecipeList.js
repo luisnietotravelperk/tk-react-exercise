@@ -1,27 +1,37 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-import useFetch from "../../hooks/useFetch";
+import { getRecipes } from "../../apis/RecipeAPI";
 import { Button, ButtonBox, MainSection } from "../Common";
 import RecipeListElements from "./RecipeListElements";
 
 const RecipeList = () => {
-  const baseUrl = 'http://localhost:8000/api/recipe/recipe/'
-  const [url, setUrl] = useState(baseUrl)
   const [search, setSearch] = useState('')
-  const { data: recipes, isPending, error } = useFetch(url)
+  const [recipes, setRecipes] = useState(null)
+  const [isPending, setPending] = useState(true)
+  const [error, setError] = useState(null)
+
+  const fetchRecipes = (name) => {
+    setPending(true)
+    setError(null)
+    setRecipes(null)
+
+    getRecipes(name).then(data => {
+      setPending(false)
+      setRecipes(data)
+    }).catch(e => {
+      setPending(false)
+      setError(e.message)
+    })
+  }
 
   const handleSearch = () => {
     fetchRecipes(search)
   }
 
-  const fetchRecipes = (name) => {
-    let finalUrl = baseUrl
-    if (name) {
-      finalUrl = `${finalUrl}?name=${name}`
-    }
+  useEffect(() => {
+    fetchRecipes()
+  },[])
 
-    setUrl(finalUrl)
-  }
   return (
     <MainSection>
       <h1>Recipes</h1>

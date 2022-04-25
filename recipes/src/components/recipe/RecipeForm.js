@@ -1,22 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { createRecipe, getRecipe, updateRecipe } from "../../apis/RecipeAPI";
 import { Button, ButtonBox, MainSection } from "../Common";
-
-// const newRecipe = () => {
-//   return {
-//     name: '',
-//     description: '',
-//     ingredients: []
-//   }
-// }
 
 const RecipeForm = () => {
   let params = useParams()
   let navigate = useNavigate()
-
   const recipeId = params.recipeId
-  const baseUrl = `http://localhost:8000/api/recipe/recipe/`
-  const baseUrlUpdate = `${baseUrl}${recipeId}/`
 
   const title = recipeId
     ? 'Update a recipe'
@@ -25,7 +15,7 @@ const RecipeForm = () => {
   const [description, setDescription] = useState('')
   const [ingredients, setIngredients] = useState([])
   const [ingredientInput, setIngredientInput] = useState('')
-  const [isPending, setIsPending] = useState(false)
+  const [isPending, setPending] = useState(false)
   const [error, setError] = useState(null)
 
   const addIngredient = () => {
@@ -45,65 +35,47 @@ const RecipeForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    setError(null)
+    setPending(true)
 
     const recipe = {
       name: name,
       description: description,
       ingredients: ingredients
     }
-    const url = recipeId ? baseUrlUpdate : baseUrl
-    const method = recipeId ? 'PUT' : 'POST'
-    const redirect  = recipeId ? `/recipes/${recipeId}` : '/recipes'
+    const promise = !recipeId
+      ? createRecipe(recipe)
+      : updateRecipe(recipeId, recipe)
 
-    setError(null)
-
-    fetch(url, {
-      method: method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(recipe)
-    }).then((res) => {
-      if (res.ok) {
-        navigate(redirect)
-      } else {
-        setError(res.statusText)
-      }
-    })
+    promise
+      .then(data => {
+        navigate(`/recipes/${data.id}/`)
+      })
+      .catch(e => {
+        setError(e.message)
+        setPending(false)
+      })
   }
 
   useEffect(() => {
-    getRecipe()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const getRecipe = () => {
     if (!recipeId) {
-      return;
+      return
     }
 
-    setIsPending(true)
-    setError(null)
+    setPending(true)
 
-    fetch(baseUrlUpdate)
-      .then(res => {
-        if (!res.ok) {
-          throw Error('Could not fetch the data')
-        }
-
-        return res.json();
-      })
+    getRecipe(recipeId)
       .then(data => {
         setName(data.name)
         setDescription(data.description)
         setIngredients(data.ingredients)
-        setIsPending(false)
+        setPending(false)
       })
       .catch(e => {
-        if (e.name !== 'AbortError') {
-          setError(e.message)
-          setIsPending(false)
-        }
+        setError(e.message)
+        setPending(false)
       })
-  }
+  }, [recipeId])
 
   return (
     <MainSection>
