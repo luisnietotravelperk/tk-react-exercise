@@ -49,6 +49,7 @@ const RecipeForm = () => {
 
     promise
       .then(data => {
+        setPending(false)
         navigate(`/recipes/${data.id}/`)
       })
       .catch(e => {
@@ -84,18 +85,18 @@ const RecipeForm = () => {
       {error && <div>{error}</div>}
       {!isPending && !error && <form onSubmit={(e) => handleSubmit(e)}>
         <label>Name:</label>
-        <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+        <input aria-label="input-name" type="text" value={name} onChange={(e) => setName(e.target.value)} required />
 
         <label>Descrition</label>
-        <textarea cols="30" rows="10" value={description} onChange={(e) => setDescription(e.target.value)} required></textarea>
+        <textarea aria-label="input-description" cols="30" rows="10" value={description} onChange={(e) => setDescription(e.target.value)} required></textarea>
 
         <label>Ingredients</label>
         <div style={{display:"flex"}}>
           <input
-            type="text" value={ingredientInput}
+            aria-label="input-ingredient" type="text" value={ingredientInput}
             onChange={(e) => setIngredientInput(e.target.value)}
             style={{flexGrow: 1, marginRight: "10px"}} />
-          <Button type="button" onClick={() => addIngredient()}>Add</Button>
+          <Button aria-label="button-add-ingredient" type="button" onClick={() => addIngredient()}>Add</Button>
         </div>
 
         <div className="span-content">
@@ -108,7 +109,7 @@ const RecipeForm = () => {
         </div>
 
         <ButtonBox>
-          <Button type="submit" style={{width: "100%"}}>Save</Button>
+          <Button aria-label="button-save" type="submit" style={{width: "100%"}}>Save</Button>
         </ButtonBox>
       </form>}
     </MainSection>

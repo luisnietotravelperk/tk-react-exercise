@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
 import { getRecipes } from "../../apis/RecipeAPI";
 import { Button, ButtonBox, MainSection } from "../Common";
 import RecipeListElements from "./RecipeListElements";
@@ -16,7 +15,6 @@ const RecipeList = () => {
     setRecipes(null)
 
     getRecipes(name).then(data => {
-      // console.log(data)
       setRecipes(data)
       setPending(false)
     }).catch(e => {
@@ -54,8 +52,6 @@ const RecipeList = () => {
       { error && <div>{error}</div>}
       { isPending && <div>Loading...</div>}
       { recipes && <RecipeListElements recipes={recipes} /> }
-
-      <Outlet />
     </MainSection>
   );
 }
