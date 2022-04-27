@@ -1,0 +1,113 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<RecipeDetail /> Render all the component 1`] = `
+<DocumentFragment>
+  <article
+    class="sc-dkzDqf glcQRH"
+  >
+    <section>
+      <h1>
+        recipe 1
+      </h1>
+      <h2>
+        Description [
+        <a
+          href="/recipes/update/1"
+        >
+          Edit
+        </a>
+        ]
+      </h2>
+      <p>
+        Lorem ipsum
+      </p>
+      <h2>
+        Ingredients
+      </h2>
+      <li>
+        ingredient 1
+      </li>
+      <li>
+        ingredient 2
+      </li>
+      <li>
+        ingredient 3
+      </li>
+      <div
+        class="sc-bczRLJ bNBYBW"
+      >
+        <button
+          class="sc-gsnTZi ciHGB"
+        >
+          Delete
+        </button>
+        <a
+          href="/recipes"
+        >
+          <button
+            class="sc-gsnTZi ciHGB"
+          >
+            Back
+          </button>
+        </a>
+      </div>
+    </section>
+  </article>
+</DocumentFragment>
+`;
+
+exports[`<RecipeDetail /> Render all the information 1`] = `
+<DocumentFragment>
+  <article
+    class="sc-dkzDqf glcQRH"
+  >
+    <section>
+      <h1>
+        recipe 1
+      </h1>
+      <h2>
+        Description [
+        <a
+          href="/recipes/update/1"
+        >
+          Edit
+        </a>
+        ]
+      </h2>
+      <p>
+        Lorem ipsum
+      </p>
+      <h2>
+        Ingredients
+      </h2>
+      <li>
+        ingredient 1
+      </li>
+      <li>
+        ingredient 2
+      </li>
+      <li>
+        ingredient 3
+      </li>
+      <div
+        class="sc-bczRLJ bNBYBW"
+      >
+        <button
+          class="sc-gsnTZi ciHGB"
+        >
+          Delete
+        </button>
+        <a
+          href="/recipes"
+        >
+          <button
+            class="sc-gsnTZi ciHGB"
+          >
+            Back
+          </button>
+        </a>
+      </div>
+    </section>
+  </article>
+</DocumentFragment>
+`;
